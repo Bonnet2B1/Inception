@@ -1,0 +1,37 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    50-server.cnf                                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: edelarbr <edelarbr@student.42mulhouse.fr>  +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: Invalid Date        by                   #+#    #+#              #
+#    Updated: 2024/05/05 23:40:49 by edelarbr         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+[server]
+
+[mysqld]
+
+# My settings
+port                    = 3306
+bind-address            = *
+socket                  = /run/mysqld/mysqld.sock
+
+# Default settings
+user                    = mysql
+pid-file                = /run/mysqld/mysqld.pid
+basedir                 = /usr
+datadir                 = /var/lib/mysql
+tmpdir                  = /tmp
+lc-messages-dir         = /usr/share/mysql
+lc-messages             = en_US
+character-set-server	= utf8mb4
+collation-server      	= utf8mb4_general_ci
+
+[embedded]
+
+[mariadb]
+
+[mariadb-10.5]

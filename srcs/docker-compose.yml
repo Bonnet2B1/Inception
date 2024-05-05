@@ -1,0 +1,96 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    docker-compose.yml                                 :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: edelarbr <edelarbr@student.42mulhouse.fr>  +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#                                                      #+#    #+#              #
+#                                                     ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+services:
+
+# **************************************************************************** #
+#                                                                              #
+#                                    MARIADB                                   #
+#                                                                              #
+# **************************************************************************** #
+
+  mariadb:
+    image: mariadb:inception
+    container_name: mariadb
+    build: requirements/mariadb
+    ports:
+      - "3306"
+    networks:
+      # - fill
+    volumes:
+      # - fill
+    restart: unless-stopped
+    env_file: .env
+    healthcheck:
+      test: # - fill
+      interval: 5s
+      timeout: 1s
+      retries: 30
+      start_period: 5s
+
+
+# **************************************************************************** #
+#                                                                              #
+#                                   WORDPRESS                                  #
+#                                                                              #
+# **************************************************************************** #
+
+  wordpress:
+    image: wordpress:inception
+    container_name: wordpress
+    build: requirements/wordpress
+    ports:
+      - "9000"
+    networks:
+      # - fill
+    volumes:
+      # - fill
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    healthcheck:
+      test: # - fill
+      interval: 5s
+      timeout: 1s
+      retries: 30
+      start_period: 5s
+
+
+# **************************************************************************** #
+#                                                                              #
+#                                     NGINX                                    #
+#                                                                              #
+# **************************************************************************** #
+
+  nginx:
+    image: nginx:inception
+    container_name: nginx
+    build: requirements/nginx
+    ports:
+      - "443:443"
+    networks:
+      # - fill
+    volumes:
+      # - fill
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    healthcheck:
+      test: # - fill
+      interval: 5s
+      timeout: 1s
+      retries: 30
+      start_period: 5s
