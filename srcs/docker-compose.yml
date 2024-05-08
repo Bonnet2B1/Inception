@@ -106,14 +106,14 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /Users/eli/Documents/GitHub/Inception/temp_home/data/v_mariadb
+      device: /home/edelarbr/data/v_mariadb
 
   v_wordpress:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /Users/eli/Documents/GitHub/Inception/temp_home/data/v_wordpress
+      device: /home/edelarbr/data/v_wordpress
 
 
 

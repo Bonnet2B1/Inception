@@ -1,23 +1,23 @@
 up:
-	@sudo mkdir -p ~/data/v_wordpress
-	@sudo mkdir -p ~/data/v_mariadb
-	@sudo docker-compose -f srcs/docker-compose.yml up
+	@mkdir -p ~/data/v_wordpress
+	@mkdir -p ~/data/v_mariadb
+	@docker-compose -f srcs/docker-compose.yml up
 
 upbuild:
-	@sudo docker-compose -f srcs/docker-compose.yml up --build
+	@docker-compose -f srcs/docker-compose.yml up --build
 
 down:
-	@sudo docker-compose -f srcs/docker-compose.yml down
+	@docker-compose -f srcs/docker-compose.yml down
 	@echo "Down"
 
 clean: down
-	@sudo rm -rf ~/data/v_wordpress/*
-	@sudo rm -rf ~/data/v_mariadb/*
-	@if [ $$(sudo docker ps -q | wc -l) -gt 0 ]; then sudo docker stop $$(sudo docker ps -q); fi
-	@if [ $$(sudo docker ps -aq | wc -l) -gt 0 ]; then sudo docker rm $$(sudo docker ps -aq); fi
-	@if [ $$(sudo docker images -q | wc -l) -gt 0 ]; then sudo docker rmi $$(sudo docker images -q); fi
-	@if [ $$(sudo docker volume ls -q | wc -l) -gt 0 ]; then sudo docker volume rm $$(sudo docker volume ls -q); fi
-	@sudo docker system prune -f
+	@rm -rf ~/data/v_wordpress/*
+	@rm -rf ~/data/v_mariadb/*
+	@if [ $$(docker ps -q | wc -l) -gt 0 ]; then docker stop $$(docker ps -q); fi
+	@if [ $$(docker ps -aq | wc -l) -gt 0 ]; then docker rm $$(docker ps -aq); fi
+	@if [ $$(docker images -q | wc -l) -gt 0 ]; then docker rmi $$(docker images -q); fi
+	@if [ $$(docker volume ls -q | wc -l) -gt 0 ]; then docker volume rm $$(docker volume ls -q); fi
+	@docker system prune -f
 	@echo "Cleaned"
 
 re: clean up
