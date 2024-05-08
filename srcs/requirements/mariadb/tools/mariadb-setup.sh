@@ -1,30 +1,22 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    mariadb-setup.sh                                   :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: edelarbr <edelarbr@student.42mulhouse.fr>  +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/05/05 15:41:28 by edelarbr          #+#    #+#              #
-#    Updated: 2024/05/06 00:31:07 by edelarbr         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+#!/bin/bash
 
-DB_NAME=thedatabase
-DB_USER=theuser
-DB_PASSWORD=abc
-MARIADB_PASS_ROOT=123
+if [ ! -d "/var/lib/mysql/$DB_NAME" ]
+then
 
-service mariadb start
+	service mariadb start
+	sleep 2
 
-mariadb -v -u root << EOF
-CREATE DATABASE IF NOT EXISTS $DB_NAME;
-CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PASSWORD';
-GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%' IDENTIFIED BY '$DB_PASSWORD';
-GRANT ALL PRIVILEGES ON $DB_NAME.* TO 'root'@'%' IDENTIFIED BY '$MARIADB_PASS_ROOT';
-SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MARIADB_PASS_ROOT');
-EOF
+	mariadb --execute "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password USING PASSWORD ('$DB_ROOT_PASSWORD');"
+	mariadb -u root -p$DB_ROOT_PASSWORD --execute "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+	mariadb -u root -p$DB_ROOT_PASSWORD --execute "CREATE USER IF NOT EXISTS '$DB_USER_NAME'@'%' IDENTIFIED WITH mysql_native_password USING PASSWORD ('$DB_USER_PASSWORD');"
+	mariadb -u root -p$DB_ROOT_PASSWORD --execute "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER_NAME'@'%';"
 
-sleep 5
+	mariadb-admin -u root -p$DB_ROOT_PASSWORD shutdown
+	sleep 2
+fi
 
-service mariadb stop
+if [ -d "/var/lib/mysql/$DB_NAME" ]
+then
+	touch /tmp/started
+	mariadbd
+fi

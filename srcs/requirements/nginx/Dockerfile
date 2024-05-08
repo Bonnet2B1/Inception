@@ -6,7 +6,7 @@
 #    By: edelarbr <edelarbr@student.42mulhouse.fr>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 17:54:05 by edelarbr          #+#    #+#              #
-#    Updated: 2024/05/05 23:18:13 by edelarbr         ###   ########.fr        #
+#    Updated: 2024/05/08 19:17:36 by edelarbr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,4 +31,5 @@ COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 # Nginx index
 RUN chmod 755 /var/www/html
 RUN chown -R www-data:www-data /var/www/html
+RUN touch /tmp/started
 CMD [ "nginx", "-g", "daemon off;" ]

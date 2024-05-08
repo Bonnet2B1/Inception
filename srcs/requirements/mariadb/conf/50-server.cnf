@@ -20,7 +20,7 @@ bind-address            = *
 socket                  = /run/mysqld/mysqld.sock
 
 # Default settings
-user                    = mysql
+user                    = root
 pid-file                = /run/mysqld/mysqld.pid
 basedir                 = /usr
 datadir                 = /var/lib/mysql

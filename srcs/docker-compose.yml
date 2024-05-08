@@ -19,19 +19,18 @@ services:
 # **************************************************************************** #
 
   mariadb:
-    image: mariadb:inception
     container_name: mariadb
     build: requirements/mariadb
     ports:
       - "3306"
     networks:
-      # - fill
+      - inception
     volumes:
-      # - fill
+      - v_mariadb:/var/lib/mysql
     restart: unless-stopped
     env_file: .env
     healthcheck:
-      test: # - fill
+      test: test -f /tmp/started
       interval: 5s
       timeout: 1s
       retries: 30
@@ -45,22 +44,21 @@ services:
 # **************************************************************************** #
 
   wordpress:
-    image: wordpress:inception
     container_name: wordpress
     build: requirements/wordpress
     ports:
       - "9000"
     networks:
-      # - fill
+      - inception
     volumes:
-      # - fill
+      - v_wordpress:/var/www/wordpress
     restart: unless-stopped
     env_file: .env
     depends_on:
       mariadb:
         condition: service_healthy
     healthcheck:
-      test: # - fill
+      test: test -f /tmp/started
       interval: 5s
       timeout: 1s
       retries: 30
@@ -74,23 +72,51 @@ services:
 # **************************************************************************** #
 
   nginx:
-    image: nginx:inception
     container_name: nginx
     build: requirements/nginx
     ports:
       - "443:443"
     networks:
-      # - fill
+      - inception
     volumes:
-      # - fill
+      - "v_wordpress:/var/www/wordpress"
     restart: unless-stopped
     env_file: .env
     depends_on:
       wordpress:
         condition: service_healthy
     healthcheck:
-      test: # - fill
+      test: test -f /tmp/started
       interval: 5s
       timeout: 1s
       retries: 30
       start_period: 5s
+
+
+
+# **************************************************************************** #
+#                                                                              #
+#                                    VOLUMES                                   #
+#                                                                              #
+# **************************************************************************** #
+
+volumes:
+  v_mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Users/eli/Documents/GitHub/Inception/temp_home/data/v_mariadb
+
+  v_wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Users/eli/Documents/GitHub/Inception/temp_home/data/v_wordpress
+
+
+
+networks:
+  inception:
+    driver: bridge
